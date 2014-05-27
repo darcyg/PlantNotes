@@ -9,7 +9,12 @@ It also allows users to control pumps or any other device via another relay boar
 More infomation:
 http://plantnotes.co.uk
 
+Connecting the NRF24L01+
+------------------------
+http://plantnotes.co.uk/setup-guide/
+
 Credits:
+--------
 - Jake Malley, Gabriel Barnes, Alex Osbourne
 
 - RF24 maniacbug (https://github.com/maniacbug/RF24) 
