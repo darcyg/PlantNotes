@@ -22,30 +22,30 @@ class InputData(threading.Thread):
 		sensor_data = self.input_string[4:]
 
 		# Connect to the database with user root and password root123
-	    con = MySQLdb.connect(host="localhost",user="root",passwd="root123", db="sensors_db")
-	    cursor = con.cursor()
-	    
-	    # Check if row exists
-	    q = "SELECT count(1) from tbl_sensors where sensor_name='"+sensor_name+"';"
-	    cursor.execute(q)
+		con = MySQLdb.connect(host="localhost",user="root",passwd="root123", db="sensors_db")
+		cursor = con.cursor()
 
-	    if cursor.fetchone()[0]:
-	      
-	        # Update the the table if there is already a sensor witht that sensor_name
-	        q = "UPDATE tbl_sensors SET sensor_data="+sensor_data+" WHERE sensor_name='"+sensor_name+"';"
-	        cursor.execute(q)
+		# Check if row exists
+		q = "SELECT count(1) from tbl_sensors where sensor_name='"+sensor_name+"';"
+		cursor.execute(q)
 
-	    else:
-	        # Create a new row for that sensor
-	        q = "INSERT INTO tbl_sensors (sensor_name, sensor_data) VALUES ('"+sensor_name+"', "+sensor_data+");"
-	        cursor.execute(q)
-	    
-	    # Log Data 
-	    now = str(time.ctime())
-	    q = "INSERT INTO tbl_datalog (now, sensor_name, sensor_data) VALUES ('"+now+"','"+sensor_name+"', "+sensor_data+");"
-	    cursor.execute(q)       
-	    print("SQL Done")
+		if cursor.fetchone()[0]:
 
-	    if exitFlag:
-	    	thread.exit()
+			# Update the the table if there is already a sensor witht that sensor_name
+			q = "UPDATE tbl_sensors SET sensor_data="+sensor_data+" WHERE sensor_name='"+sensor_name+"';"
+			cursor.execute(q)
+
+		else:
+			# Create a new row for that sensor
+			q = "INSERT INTO tbl_sensors (sensor_name, sensor_data) VALUES ('"+sensor_name+"', "+sensor_data+");"
+			cursor.execute(q)
+
+		# Log Data 
+		now = str(time.ctime())
+		q = "INSERT INTO tbl_datalog (now, sensor_name, sensor_data) VALUES ('"+now+"','"+sensor_name+"', "+sensor_data+");"
+		cursor.execute(q)       
+		print("SQL Done")
+
+		if exitFlag:
+			thread.exit()
 

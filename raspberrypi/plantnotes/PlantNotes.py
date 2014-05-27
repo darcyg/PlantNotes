@@ -29,7 +29,7 @@ while True:
 	if RF24Listener.message_queue:
 		# Get + remove message
 		rf24_message = RF24Listener.message_queue[0]
-		RF24Listener.message_queue(rf24_message)
+		RF24Listener.message_queue.remove(rf24_message)
 		# Make a new thread to input this to SQL
 		sql_thread = UpdateMySQL.InputData(3, "SQLThread",rf24_message)
 		sql_thread.start()
