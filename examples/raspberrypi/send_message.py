@@ -11,4 +11,4 @@ message = raw_input("Message: ")
 while message:
     if radio.write(message):
         print("Sent", message)
-    message = input("Message: ")
+    message = raw_input("Message: ")
