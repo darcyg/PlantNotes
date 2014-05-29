@@ -17,13 +17,14 @@ void setup(void)
   pinMode(2, OUTPUT);
   pinMode(3, OUTPUT);
   pinMode(4, OUTPUT);
+  digitalWrite(2,LOW);
+  digitalWrite(3,LOW);
+  digitalWrite(4,LOW);
 }
 
 void loop(void)
 {
-  digitalWrite(2,LOW);
-  digitalWrite(3,LOW);
-  digitalWrite(4,LOW);
+
   while (radio.available()) {
     unsigned char length = radio.getDynamicPayloadSize();
     radio.read(payload, length);
@@ -36,14 +37,23 @@ void loop(void)
     }
     Serial.println(s);
     
-    if (s=="cmd_water_01"){
+    if (s=="cmd_01_on"){
       digitalWrite(2,HIGH);
     }
-    if (s=="cmd_water_02"){
+    if (s=="cmd_02_on"){
       digitalWrite(3,HIGH); 
     }
-    if (s=="cmd_water_03"){
+    if (s=="cmd_03_on"){
       digitalWrite(4,HIGH);
+    }
+    if (s=="cmd_01_off"){
+      digitalWrite(2,LOW);
+    }
+    if (s=="cmd_02_off"){
+      digitalWrite(3,LOW); 
+    }
+    if (s=="cmd_03_off"){
+      digitalWrite(4,LOW);
     }
 
     
