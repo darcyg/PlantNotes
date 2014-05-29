@@ -19,21 +19,29 @@ class SocketThread(threading.Thread):
 
 	def run(self):
 
-		self.create_socket_server()
+		try:
+			self.create_socket_server()
+		except socket.error:
+			print("Error creating socket")
+		else:
 
-		while True:
-			self.conn, self.addr = self.sock.accept()
-			print("Connected to",self.addr)
+			while True:
+				try:
+					self.conn, self.addr = self.sock.accept()
+					print("Connected to",self.addr)
 
-			self.payload = self.conn.recv(32)
-			self.message_received(self.payload) 
+					self.payload = self.conn.recv(32)
+					self.message_received(self.payload) 
 
-			self.conn.send("msg_received")
-			self.conn.close()
+					self.conn.send("msg_received")
+					self.conn.close()
 
-			if self.payload == "cmd_close":
-				break
-		self.sock.close()
+					if self.payload == "cmd_close":
+						break
+				except socket.error:
+					print("Error connecting to socket")
+				finally:
+					self.sock.close()
 
 		if exitFlag:
 			thread.exit()
