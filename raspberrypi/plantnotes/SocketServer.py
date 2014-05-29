@@ -21,34 +21,37 @@ class SocketThread(threading.Thread):
 
 		try:
 			self.create_socket_server()
-		except socket.error:
-			print("Error creating socket")
+		except socket.error, e:
+			print("Error creating socket: %s"%(e))
+
 		else:
 
-			while True:
-				try:
-					self.conn, self.addr = self.sock.accept()
-					print("Connected to",self.addr)
+			try:
+				while True:
+						self.conn, self.addr = self.sock.accept()
+						print("Connected to",self.addr)
 
-					self.payload = self.conn.recv(32)
-					self.message_received(self.payload) 
+						self.payload = self.conn.recv(32)
+						self.message_received(self.payload) 
 
-					self.conn.send("msg_received")
-					self.conn.close()
-
-					if self.payload == "cmd_close":
-						break
-				except socket.error:
-					print("Error connecting to socket")
-				finally:
-					self.sock.close()
+						self.conn.send(" msg_received")
+						
+			except socket.error, e:
+				print("Socket Error:")
+				print(e)
+			finally:
+				self.conn.close()
+				self.sock.close()
+				
 
 		if exitFlag:
 			thread.exit()
 
 	def create_socket_server(self):
-		self.sock = socket.socket()
-		self.host = socket.gethostname() # Localhost
+		self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.host = '127.0.0.1'
+		print("HOST0")
+		print(self.host)
 		# Bind to that address + port.
 		self.sock.bind((self.host, self.port))
 		self.sock.listen(5) # Listen
@@ -61,6 +64,7 @@ class SocketThread(threading.Thread):
 
 
 
-
+x = SocketThread(1,"Socket",5559)
+x.start()
 
         
