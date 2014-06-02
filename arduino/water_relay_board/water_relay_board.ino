@@ -1,4 +1,16 @@
+/*     
+      Plant Notes - Arduino water / relay board
 
+      Switches relays on / off depending on commands send over radio.
+
+      Created: 27/05/14
+      Last Edited: 02/06/14
+
+      Author: Gabriel Barnes, Jake Malley
+
+      http://www.plantnotes.co.uk
+
+*
 #include <SPI.h>
 #include "RF24.h"
 
