@@ -50,8 +50,7 @@ class SocketThread(threading.Thread):
 	def create_socket_server(self):
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.host = '127.0.0.1'
-		print("HOST0")
-		print(self.host)
+		
 		# Bind to that address + port.
 		self.sock.bind((self.host, self.port))
 		self.sock.listen(5) # Listen
