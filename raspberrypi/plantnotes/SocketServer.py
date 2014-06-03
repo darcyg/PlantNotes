@@ -28,13 +28,13 @@ class SocketThread(threading.Thread):
 
 			try:
 				while True:
-						self.conn, self.addr = self.sock.accept()
-						print("Connected to",self.addr)
+					self.conn, self.addr = self.sock.accept()
+					print("Connected to",self.addr)
 
-						self.payload = self.conn.recv(32)
-						self.message_received(self.payload) 
+					self.payload = self.conn.recv(32)
+					self.message_received(self.payload) 
 
-						self.conn.send(" msg_received")
+					self.conn.send(" msg_received")
 						
 			except socket.error, e:
 				print("Socket Error:")
