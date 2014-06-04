@@ -10,7 +10,7 @@
 
       http://www.plantnotes.co.uk
 
-*
+*/
 #include <SPI.h>
 #include "RF24.h"
 
