@@ -8,6 +8,7 @@
 from pyRF24 import pyRF24
 import threading, time
 
+exitFlag = 0
 message_queue = []
 writing_queue = []
 
@@ -16,6 +17,7 @@ class RF24ListenerThread(threading.Thread):
 		threading.Thread.__init__(self)
 		self.threadID = threadID
 		self.name = name
+		self.running = True
 
 		# Setup Radio
 		self.pipes = [0xF0F0F0F0E1, 0xF0F0F0F0E2]
@@ -32,7 +34,7 @@ class RF24ListenerThread(threading.Thread):
 		self.radio.startListening()
 		self.radio.setChannel(self.reading_channel)
 
-		while True:
+		while self.running:
 
 			self.payload = []
 
@@ -50,6 +52,9 @@ class RF24ListenerThread(threading.Thread):
 				self.payload = self.radio.read(length)[:length]
 
 				self.message_received(self.payload)
+
+		if exitFlag:
+			thread.exit()
 
 	def message_received(self, payload):
 
@@ -74,4 +79,8 @@ class RF24ListenerThread(threading.Thread):
 			time.sleep(0.25)
 			self.radio.startListening()
 			self.radio.setChannel(self.reading_channel)
+
+	def stop_thread(self):
+
+		self.running = False
 
