@@ -16,6 +16,7 @@ class SocketThread(threading.Thread):
 		self.threadID = threadID
 		self.name=name
 		self.port=port
+		self.running=True
 
 	def run(self):
 
@@ -23,26 +24,33 @@ class SocketThread(threading.Thread):
 			self.create_socket_server()
 		except socket.error, e:
 			print("Error creating socket: %s"%(e))
-
 		else:
-
 			try:
-				while True:
-					self.conn, self.addr = self.sock.accept()
-					print("Connected to",self.addr)
-
-					self.payload = self.conn.recv(32)
-					self.message_received(self.payload) 
-
-					self.conn.send(" msg_received")
+				while self.running:
+					
+					try:
+						self.conn, self.addr = self.sock.accept()
+					except socket.error:pass
+					else:
+						print("Connected to",self.addr)
 						
+						# Wait for message
+						while True:
+							try:
+								self.payload = self.conn.recv(32)
+							except socket.error:pass
+							else:
+								self.message_received(self.payload) 
+								break
+
+						self.conn.send(" msg_received")
+
 			except socket.error, e:
 				print("Socket Error:")
 				print(e)
 			finally:
-				self.conn.close()
 				self.sock.close()
-				
+
 
 		if exitFlag:
 			thread.exit()
@@ -50,10 +58,11 @@ class SocketThread(threading.Thread):
 	def create_socket_server(self):
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.host = '127.0.0.1'
-		
+
 		# Bind to that address + port.
 		self.sock.bind((self.host, self.port))
 		self.sock.listen(5) # Listen
+		self.sock.setblocking(0)
 
 	def message_received(self, payload):
 
@@ -61,9 +70,6 @@ class SocketThread(threading.Thread):
 		if payload[:3] == "cmd":
 			message_queue.append(payload)
 
+	def stop_thread(self):
+		self.running = False
 
-
-x = SocketThread(1,"Socket",5559)
-x.start()
-
-        

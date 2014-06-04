@@ -16,9 +16,10 @@ radio_listener = RF24Listener.RF24ListenerThread(2, "ListenThread")
 server.start()
 radio_listener.start()
 
-while True:
+
 	
-	try:
+try:
+	while True:
 		# Deal with socket messages
 		if SocketServer.message_queue:
 			# Get + remove message
@@ -26,7 +27,7 @@ while True:
 			SocketServer.message_queue.remove(socket_message)
 			# Add the message to thr writing queue
 			RF24Listener.writing_queue.append(socket_message)
-			
+
 		# Deal with RF24 Messages
 		if RF24Listener.message_queue:
 			# Get + remove message
@@ -36,18 +37,17 @@ while True:
 			sql_thread = UpdateMySQL.InputData(3, "SQLThread",rf24_message)
 			sql_thread.start()
 
-	except KeyboardInterrupt:
+except KeyboardInterrupt:
 
-		# Close the connection and socket.
-		server.conn.close()
-		server.sock.close()
+	# Close the threads
+	server.stop_thread()
+	radio_listener.stop_thread()
 
-		print("Exiting")
-		# Break the loop.
-		break
+	print("Exiting")
+	
 
 
-	time.sleep(0.5)
+time.sleep(0.5)
 
 
 
