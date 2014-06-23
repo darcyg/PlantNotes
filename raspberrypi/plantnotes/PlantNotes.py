@@ -9,8 +9,8 @@ import SocketServer, RF24Listener, UpdateMySQL # Our Files
 import sys, time
 
 port = int(raw_input("Enter port> ")) # For testing only, actual service will run on port 5021
-server = SocketServer.SocketThread(1, "SocketThread", port)
-radio_listener = RF24Listener.RF24ListenerThread(2, "ListenThread")
+server = SocketServer.SocketThread(port)
+radio_listener = RF24Listener.RF24ListenerThread()
 
 # Start both threads.
 server.start()
@@ -34,7 +34,7 @@ try:
 			rf24_message = RF24Listener.message_queue[0]
 			RF24Listener.message_queue.remove(rf24_message)
 			# Make a new thread to input this to SQL
-			sql_thread = UpdateMySQL.InputData(3, "SQLThread",rf24_message)
+			sql_thread = UpdateMySQL.InputData(rf24_message)
 			sql_thread.start()
 
 except KeyboardInterrupt:

@@ -13,10 +13,8 @@ message_queue = []
 writing_queue = []
 
 class RF24ListenerThread(threading.Thread):
-	def __init__(self, threadID, name):
+	def __init__(self):
 		threading.Thread.__init__(self)
-		self.threadID = threadID
-		self.name = name
 		self.running = True
 
 		# Setup Radio

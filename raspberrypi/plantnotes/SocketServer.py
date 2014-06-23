@@ -11,10 +11,8 @@ exitFlag = 0
 message_queue = [] 
 
 class SocketThread(threading.Thread):
-	def __init__(self, threadID, name, port):
+	def __init__(self, port):
 		threading.Thread.__init__(self)
-		self.threadID = threadID
-		self.name=name
 		self.port=port
 		self.running=True
 
@@ -23,7 +21,7 @@ class SocketThread(threading.Thread):
 		try:
 			self.create_socket_server()
 		except socket.error, e:
-			print("Error creating socket: %s"%(e))
+			print("Error creating socket: %s" %(e))
 		else:
 			try:
 				while self.running:
@@ -48,8 +46,8 @@ class SocketThread(threading.Thread):
 			except socket.error, e:
 				print("Socket Error:")
 				print(e)
-			finally:
-				self.sock.close()
+		finally:
+			self.sock.close()
 
 
 		if exitFlag:

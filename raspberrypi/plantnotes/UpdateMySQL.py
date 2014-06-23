@@ -5,15 +5,14 @@
 # Updates SQL data dependant on input
 
 # Imports
-import threading, MySQLdb, time
+import threading, MySQLdb
+from time import ctime
 
 exitFlag = 0
 
 class InputData(threading.Thread):
-	def __init__(self, threadID, name, input_string):
+	def __init__(self,input_string):
 		threading.Thread.__init__(self)
-		self.threadID = threadID
-		self.name = name
 		self.input_string = input_string
 
 	def run(self):
@@ -41,7 +40,7 @@ class InputData(threading.Thread):
 			cursor.execute(q)
 
 		# Log Data 
-		now = str(time.ctime())
+		now = str(ctime())
 		q = "INSERT INTO tbl_datalog (now, sensor_name, sensor_data) VALUES ('"+now+"','"+sensor_name+"', "+sensor_data+");"
 		cursor.execute(q)       
 		print("SQL Done")
