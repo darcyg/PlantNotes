@@ -5,7 +5,7 @@
 # Updates SQL data dependant on input
 
 # Imports
-import threading, MySQLdb
+import threading, MySQLdb, LCD
 from time import ctime
 
 exitFlag = 0
@@ -19,6 +19,11 @@ class InputData(threading.Thread):
 		# Firstly sub string the data.
 		sensor_name = self.input_string[:4]
 		sensor_data = self.input_string[4:]
+
+		# Update the LCD.
+		lcd_display = LCD.LCD()
+		lcd_display.lcd_display("Updated:",sensor_name+" "+sensor_data)
+
 
 		# Connect to the database with user root and password root123
 		con = MySQLdb.connect(host="localhost",user="root",passwd="root123", db="sensors_db")
