@@ -27,11 +27,16 @@ int output02 = 7;
 
 int buzzer = 8;
 
+// LEDS
+int red = A0;
+int green = A1;
+int blue = A2;
+
 void setup(void)
 {
   Serial.begin(9600);
   // Setup Radio.
-  setup_radio(78); // Start radio on channel 76.
+  setup_radio(78); // Start radio on channel 78.
   radio.startListening(); // Get the radio to start listening.
   Serial.println("Ready!");
   
@@ -47,6 +52,10 @@ void setup(void)
   
   pinMode(buzzer, OUTPUT);
   digitalWrite(buzzer,0);
+  
+  pinMode(red,OUTPUT);
+  pinMode(green,OUTPUT);
+  pinMode(blue,OUTPUT);
 }
 
 void loop(void)
@@ -82,6 +91,8 @@ void loop(void)
       digitalWrite(output02, 1);
     }else if (s=="cmd_04_off"){
       digitalWrite(output02, 0);
+    }else if (s.substring(0,9)=="cmd_color"){
+      display_color(s.substring(10));
     }else{
       buzzer_tone();
     }
@@ -108,4 +119,17 @@ void setup_radio(int channel){
   radio.setRetries(15,15);
   radio.openWritingPipe(pipes[0]); 
   radio.openReadingPipe(1,pipes[1]); 
+}
+
+void display_color(String rgb_color){
+  
+  // Get colour values and invert because of common anode
+  int r = 255 - rgb_color.substring(0.3).toInt();
+  int g = 255 - rgb_color.substring(0.3).toInt();
+  int b = 255 - rgb_color.substring(0.3).toInt();
+  
+  analogWrite(red, r);
+  analogWrite(green, g);
+  analogWrite(blue, b);
+    
 }
