@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # PlantNotes.py
 # Author: Jake Malley
 # 27/05/14

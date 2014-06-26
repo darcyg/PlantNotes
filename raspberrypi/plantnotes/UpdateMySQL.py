@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # UpdateMySQL.py
 # Author: Jake Malley
 # 27/05/14
